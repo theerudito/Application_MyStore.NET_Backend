@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Store.Database\Store.Database.csproj" />
+    <ProjectReference Include="..\Store.Service\Store.Service.csproj" />
+    <ProjectReference Include="..\Store.Utils\Store.Utils.csproj" />
+  </ItemGroup>
+
+</Project>
