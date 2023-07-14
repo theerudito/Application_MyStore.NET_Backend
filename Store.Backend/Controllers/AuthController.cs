@@ -1,4 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Store.DTO;
+using Store.Models;
+using Store.Service;
+using Store.Utils;
 
 namespace Store.Backend.Controllers
 {
@@ -6,143 +10,123 @@ namespace Store.Backend.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        //[HttpPost("register")]
-        //public async Task<ActionResult> POSTRegister([FromBody] MAuth auth)
-        //{
-        //    var _contextDB = new Application_ContextDB();
+        private readonly IAuthRepository _authRepository;
 
-        //    var searchUser = await _contextDB.Auth.Where(user => user.UserName == auth.UserName).FirstOrDefaultAsync();
+        public AuthController(IAuthRepository authRepository)
+        {
+            _authRepository = authRepository;
+        }
 
-        //    if (searchUser == null)
-        //    {
-        //        encryp password
-        //        auth.Password = BCrypt.Net.BCrypt.HashPassword(auth.Password);
+        [HttpPost("register")]
+        public async Task<ActionResult> POSTRegister([FromBody] MAuth auth)
+        {
+            var query = await _authRepository.Register(auth);
 
-        //        add new User
-        //        _contextDB.Auth.Add(auth);
-        //        await _contextDB.SaveChangesAsync();
-        //        return Ok("Registrado");
-        //    }
-        //    else
-        //    {
-        //        return BadRequest("Ya Existe");
-        //    }
-        //}
+            if (query == null)
+            {
+                return BadRequest(MessagesJSON.MessageError("El Usuario Ya Esta Registrado"));
+            }
+            else
+            {
+                return Ok(MessagesJSON.MessageOK("El Registro Fue Añadido Correctamente"));
+            }
+        }
 
-        //[HttpPost("login")]
-        //public async Task<ActionResult> POSTLogin([FromBody] MAuthDTO auth)
-        //{
-        //    var _contextDB = new Application_ContextDB();
+        [HttpPost("login")]
+        public async Task<ActionResult> POSTLogin([FromBody] MAuthDTO auth)
+        {
+            var query = await _authRepository.Login(auth);
 
-        //    var query = await _contextDB.Auth.Where(user => user.UserName == auth.UserName).FirstOrDefaultAsync();
+            if (query != null)
+            {
+                return Ok(MessagesJSON.MessageOK("Logiado Con Exito"));
+            }
+            else
+            {
+                return BadRequest(MessagesJSON.MessageError("Usuario O Password Son Incorrectos"));
+            }
+        }
 
-        //    if (query == null)
-        //    {
-        //        return BadRequest(new { message = "User does not exist" });
-        //    }
+        [HttpGet]
+        public async Task<ActionResult> GETUsers()
+        {
+            var query = await _authRepository.GetAllUsers();
+            if (query != null)
+            {
+                return Ok(query);
+            }
+            else
+            {
+                return BadRequest(MessagesJSON.MessageError("No Hay Registros"));
+            }
+        }
 
-        //    compare password
-        //    if (!BCrypt.Net.BCrypt.Verify(auth.Password, query.Password))
-        //    {
-        //        return BadRequest(new { message = "Password or email is wrong" });
-        //    }
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GETUser(int id)
+        {
+            var query = await _authRepository.GetUserById(id);
+            if (query != null)
+            {
+                return Ok(query);
+            }
+            else
+            {
+                return BadRequest(MessagesJSON.MessageError("No Hay Ningun Registro Con Ese ID"));
+            }
+        }
 
-        //    return Ok("Logiado");
-        //}
+        [HttpPut("{id}")]
+        public async Task<ActionResult> PUTUser([FromBody] MAuth auth)
+        {
+            var query = await _authRepository.UpdateUser(auth);
+            if (query != null)
+            {
+                if (query.IdAuth == 1)
+                {
+                    return BadRequest(
+                        MessagesJSON.MessageError("No Se Puede Realizar Esta Opcion")
+                    );
+                }
+                else
+                {
+                    return Ok(MessagesJSON.MessageOK("El Registro Fue Actualizado Correctamente"));
+                }
+            }
+            else
+            {
+                return BadRequest(MessagesJSON.MessageError("No Hay Ningun Registro Con Ese ID"));
+            }
+        }
 
-        //[HttpGet]
-        //public async Task<ActionResult> GETUsers()
-        //{
-        //    var _contextDB = new Application_ContextDB();
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DELETEUser(int id)
+        {
+            var query = await _authRepository.DeleteUser(id);
 
-        //    var query = await _contextDB.Auth.ToListAsync();
-        //    return Ok(query);
-        //}
-
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult> GETUser(int id)
-        //{
-        //    var _contextDB = new Application_ContextDB();
-
-        //    var query = await _contextDB.Auth.Where(auth => auth.IdAuth == id).FirstOrDefaultAsync();
-
-        //    if (query != null)
-        //    {
-        //        return Ok(query);
-        //    }
-        //    else
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
-
-        //[HttpPut("{id}")]
-        //public async Task<ActionResult> PUTUser([FromBody] MAuth auth)
-        //{
-        //    var _contextDB = new Application_ContextDB();
-
-        //    var query = await _contextDB.Auth.Where(user => user.IdAuth == auth.IdAuth).FirstOrDefaultAsync();
-
-        //    if (query != null)
-        //    {
-        //        if (query.IdAuth == 1)
-        //        {
-        //            return BadRequest("No Se Puede Realizar esta Accion");
-        //        }
-        //        else
-        //        {
-        //            query.User = auth.User;
-        //            query.UserName = auth.UserName;
-        //            query.Email = auth.Email;
-        //            query.Password = BCrypt.Net.BCrypt.HashPassword(auth.Password);
-        //            query.Phone = auth.Phone;
-        //            query.Direction = auth.Direction;
-        //            query.Role = auth.Role;
-        //            query.Status = auth.Status;
-
-        //            await _contextDB.SaveChangesAsync();
-        //            return Ok("Actualizado");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return BadRequest("Error");
-        //    }
-        //}
-
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult> DELETEUser(int id)
-        //{
-        //    var _contextDB = new Application_ContextDB();
-
-        //    var query = await _contextDB.Auth.Where(user => user.IdAuth == id).FirstOrDefaultAsync();
-
-        //    if (query != null)
-        //    {
-        //        if (query.IdAuth == 1)
-        //        {
-        //            return BadRequest("No Se Puede Realizar esta Accion");
-        //        }
-        //        else
-        //        {
-        //            if (query.Status == false)
-        //            {
-        //                query.Status = true;
-        //                await _contextDB.SaveChangesAsync();
-        //                return Ok("El Usuario Se Ha Activado");
-        //            }
-        //            else
-        //            {
-        //                query.Status = false;
-        //                await _contextDB.SaveChangesAsync();
-        //                return Ok("El Usuario Se Ha Desactivado");
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return BadRequest("Error");
-        //    }
-        //}
+            if (query != null)
+            {
+                if (query.IdAuth == 1)
+                {
+                    return BadRequest(
+                        MessagesJSON.MessageError("No Se Puede Realizar Esta Opcion")
+                    );
+                }
+                else
+                {
+                    if (query.Status == true)
+                    {
+                        return Ok(MessagesJSON.MessageOK("El Registro Activado"));
+                    }
+                    else
+                    {
+                        return Ok(MessagesJSON.MessageOK("El Registro Fue Desactivado"));
+                    }
+                }
+            }
+            else
+            {
+                return BadRequest(MessagesJSON.MessageError("No Hay Ningun Registro Con Ese ID"));
+            }
+        }
     }
 }

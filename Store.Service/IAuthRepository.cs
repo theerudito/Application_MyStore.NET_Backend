@@ -1,15 +1,20 @@
-﻿namespace Store.Service
+﻿using Store.DTO;
+using Store.Models;
+
+namespace Store.Service
 {
     public interface IAuthRepository
     {
-        //Task<List<Clients>> GetAllClients();
+        Task<List<MAuth>> GetAllUsers();
 
-        //Task<Clients> GetClientById(string id);
+        Task<MAuth> GetUserById(int id);
 
-        //Task CreateClient(Clients client);
+        Task<MAuth> UpdateUser(MAuth auth);
 
-        //Task<Clients> UpdateClient(string id, Clients client);
+        Task<MAuth> DeleteUser(int id);
 
-        //Task DeleteClient(string id);
+        Task<MAuth> Login(MAuthDTO authDTO);
+
+        Task<MAuth> Register(MAuth auth);
     }
 }

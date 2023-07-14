@@ -20,7 +20,9 @@ namespace Store.Repository
         {
             var _contextDB = new Application_ContextDB();
 
-            var query = await _contextDB.Client.Where(cli => cli.DNI == client.DNI).FirstOrDefaultAsync();
+            var query = await _contextDB.Client
+                .Where(cli => cli.DNI == client.DNI)
+                .FirstOrDefaultAsync();
 
             if (query == null)
             {
@@ -36,7 +38,9 @@ namespace Store.Repository
         {
             var _contextDB = new Application_ContextDB();
 
-            var query = await _contextDB.Client.Where(cli => cli.IdClient == id).FirstOrDefaultAsync();
+            var query = await _contextDB.Client
+                .Where(cli => cli.IdClient == id)
+                .FirstOrDefaultAsync();
 
             if (query != null)
             {
@@ -75,7 +79,9 @@ namespace Store.Repository
         public async Task<MClients> GetClientById(int id)
         {
             var _contextDB = new Application_ContextDB();
-            var query = await _contextDB.Client.Where(cli => cli.IdClient == id).FirstOrDefaultAsync();
+            var query = await _contextDB.Client
+                .Where(cli => cli.IdClient == id)
+                .FirstOrDefaultAsync();
 
             if (query != null)
             {
@@ -88,7 +94,9 @@ namespace Store.Repository
         {
             var _contextDB = new Application_ContextDB();
 
-            var query = await _contextDB.Client.Where(cli => cli.IdClient == client.IdClient).FirstOrDefaultAsync();
+            var query = await _contextDB.Client
+                .Where(cli => cli.IdClient == client.IdClient)
+                .FirstOrDefaultAsync();
 
             if (query != null)
             {

@@ -6,7 +6,7 @@ namespace Store.Utils
 {
     public class AutoMapperProfile : Profile
     {
-        protected AutoMapperProfile()
+        public AutoMapperProfile()
         {
             CreateMap<MAuthDTO, MAuth>();
             CreateMap<MClientsDTO, MClients>();

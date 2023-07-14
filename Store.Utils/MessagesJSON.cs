@@ -2,7 +2,6 @@
 {
     public static class MessagesJSON
     {
-        //sd
         public static Object MessageError(string messageJSON)
         {
             return new { message = messageJSON };

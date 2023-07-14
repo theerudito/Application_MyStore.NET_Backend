@@ -34,7 +34,9 @@ namespace Store.Backend.Controllers
             }
             else
             {
-                return BadRequest(MessagesJSON.MessageError("No Existe Cliente En La Base De Datos"));
+                return BadRequest(
+                    MessagesJSON.MessageError("No Existe Cliente En La Base De Datos")
+                );
             }
         }
 
@@ -58,7 +60,9 @@ namespace Store.Backend.Controllers
             {
                 if (clientExist.IdClient == 1)
                 {
-                    return BadRequest(MessagesJSON.MessageError("No Se Puede Realizar Esta Accion"));
+                    return BadRequest(
+                        MessagesJSON.MessageError("No Se Puede Realizar Esta Accion")
+                    );
                 }
                 else
                 {
@@ -67,7 +71,9 @@ namespace Store.Backend.Controllers
             }
             else
             {
-                return BadRequest(MessagesJSON.MessageError("No Existe Cliente En La Base De Datos"));
+                return BadRequest(
+                    MessagesJSON.MessageError("No Existe Cliente En La Base De Datos")
+                );
             }
         }
 
@@ -80,7 +86,9 @@ namespace Store.Backend.Controllers
             {
                 if (clientExist.IdClient == 1)
                 {
-                    return BadRequest(MessagesJSON.MessageError("No Se Puede Realizar Esta Accion"));
+                    return BadRequest(
+                        MessagesJSON.MessageError("No Se Puede Realizar Esta Accion")
+                    );
                 }
                 else
                 {
@@ -96,7 +104,9 @@ namespace Store.Backend.Controllers
             }
             else
             {
-                return BadRequest(MessagesJSON.MessageError("No Existe Cliente En La Base De Datos"));
+                return BadRequest(
+                    MessagesJSON.MessageError("No Existe Cliente En La Base De Datos")
+                );
             }
         }
     }
