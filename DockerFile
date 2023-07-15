@@ -11,4 +11,4 @@ COPY --from=build-env /publish .
 EXPOSE 80
 
 
-ENTRYPOINT ["dotnet", "MyBackend_MongoDB_CSharp.dll"]
+ENTRYPOINT ["dotnet", "./Store.Backend.dll"]
