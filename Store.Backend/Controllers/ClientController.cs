@@ -20,7 +20,14 @@ namespace Store.Backend.Controllers
         public async Task<ActionResult> GETClients()
         {
             var query = await _clientRepository.GetAllClients();
-            return Ok(query);
+            if (query != null)
+            {
+                return Ok(query);
+            }
+            else
+            {
+                return BadRequest(MessagesJSON.MessageError("No Hay Registros"));
+            }
         }
 
         [HttpGet("{id}")]

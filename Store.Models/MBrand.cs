@@ -6,7 +6,6 @@ namespace Store.Models
     {
         [Key]
         public int IdBrand { get; set; }
-
         public string Brand { get; set; } = string.Empty;
     }
 }
