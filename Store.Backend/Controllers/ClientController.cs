@@ -52,14 +52,7 @@ namespace Store.Backend.Controllers
         {
             var clientInput = await _clientRepository.SeachClient(input);
 
-            if (clientInput != null)
-            {
-                return Ok(clientInput);
-            }
-            else
-            {
-                return BadRequest(MessagesJSON.MessageError("No Hay Registros"));
-            }
+            return clientInput != null ? Ok(clientInput) : Ok(clientInput);
         }
 
         [HttpPost]

@@ -138,6 +138,8 @@ namespace Store.Repository
         {
             var _contextDB = new Application_ContextDB();
 
+            var listClients = await _contextDB.Client.ToListAsync();
+
             var query = await _contextDB.Client
                 .Where(
                     cli =>
@@ -147,13 +149,13 @@ namespace Store.Repository
                 )
                 .ToListAsync();
 
-            if (query != null)
+            if (query.Count > 0)
             {
                 return query;
             }
             else
             {
-                return null;
+                return await GetAllClients();
             }
         }
     }
