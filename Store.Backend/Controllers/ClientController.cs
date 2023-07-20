@@ -47,6 +47,21 @@ namespace Store.Backend.Controllers
             }
         }
 
+        [HttpGet("input")]
+        public async Task<ActionResult> GET_ClientInput(string input)
+        {
+            var clientInput = await _clientRepository.SeachClient(input);
+
+            if (clientInput != null)
+            {
+                return Ok(clientInput);
+            }
+            else
+            {
+                return BadRequest(MessagesJSON.MessageError("No Hay Registros"));
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult> POSTClient([FromBody] MClientsDTO client)
         {
@@ -55,7 +70,10 @@ namespace Store.Backend.Controllers
             {
                 return BadRequest(MessagesJSON.MessageError("El Cliente Ya Esta Registrado"));
             }
-            return Ok(MessagesJSON.MessageOK("El Cliente Fue Añadido Correctamente"));
+            else
+            {
+                return Ok(MessagesJSON.MessageOK("El Cliente Fue Añadido Correctamente"));
+            }
         }
 
         [HttpPut("{id}")]

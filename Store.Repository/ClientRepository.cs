@@ -26,8 +26,20 @@ namespace Store.Repository
 
             if (query == null)
             {
-                var newClient = mapper.Map<MClients>(client);
-                _contextDB.Add(newClient);
+                var newClient = new MClients
+                {
+                    DNI = client.DNI,
+                    FirstName = client.FirstName.ToUpper(),
+                    LastName = client.LastName.ToUpper(),
+                    Direction = client.Direction.ToUpper(),
+                    Phone = client.Phone,
+                    Email = client.Email,
+                    City = client.City.ToUpper(),
+                    Status = client.Status,
+                };
+
+                var mapperClient = mapper.Map<MClients>(newClient);
+                _contextDB.Add(mapperClient);
                 await _contextDB.SaveChangesAsync();
                 return newClient;
             }
@@ -107,12 +119,12 @@ namespace Store.Repository
                 else
                 {
                     query.DNI = client.DNI;
-                    query.FisrtName = client.FisrtName;
-                    query.LastName = client.LastName;
-                    query.Direction = client.Direction;
+                    query.FirstName = client.FirstName.ToUpper();
+                    query.LastName = client.LastName.ToUpper();
+                    query.Direction = client.Direction.ToUpper();
                     query.Phone = client.Phone;
                     query.Email = client.Email;
-                    query.City = client.City;
+                    query.City = client.City.ToUpper();
                     query.Status = client.Status;
 
                     await _contextDB.SaveChangesAsync();
@@ -120,6 +132,29 @@ namespace Store.Repository
                 }
             }
             return null;
+        }
+
+        public async Task<List<MClients>> SeachClient(string input)
+        {
+            var _contextDB = new Application_ContextDB();
+
+            var query = await _contextDB.Client
+                .Where(
+                    cli =>
+                        cli.FirstName.Contains(input.ToUpper())
+                        || cli.LastName.Contains(input.ToUpper())
+                        || cli.DNI.Contains(input.ToUpper())
+                )
+                .ToListAsync();
+
+            if (query != null)
+            {
+                return query;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

@@ -49,7 +49,9 @@ namespace Store.Backend.Controllers
         {
             var _contextDB = new Application_ContextDB();
 
-            var query = await _contextDB.Cities.Where(c => c.City.Contains(city)).ToListAsync();
+            var query = await _contextDB.Cities
+                .Where(c => c.City.Contains(city.ToUpper()))
+                .ToListAsync();
 
             if (query != null)
             {
@@ -67,14 +69,17 @@ namespace Store.Backend.Controllers
             var _contextDB = new Application_ContextDB();
 
             var query = await _contextDB.Cities
-                .Where(c => c.City == myCity.City)
+                .Where(c => c.City == myCity.City.ToUpper())
                 .FirstOrDefaultAsync();
 
             if (query == null)
             {
-                _contextDB.Cities.Add(myCity);
+                var newCity = new MCity { City = myCity.City.ToUpper() };
+
+                _contextDB.Cities.Add(newCity);
 
                 await _contextDB.SaveChangesAsync();
+
                 return Ok(MessagesJSON.MessageOK("La Ciudad Fue Añadida Correctamente"));
             }
             else
@@ -102,8 +107,10 @@ namespace Store.Backend.Controllers
                 }
                 else
                 {
-                    query.City = myCity.City;
+                    query.City = myCity.City.ToUpper();
+
                     await _contextDB.SaveChangesAsync();
+
                     return Ok(MessagesJSON.MessageOK("La Ciudad Fue Actualizada Correctamente"));
                 }
             }
@@ -133,6 +140,7 @@ namespace Store.Backend.Controllers
                     _contextDB.Remove(query);
 
                     await _contextDB.SaveChangesAsync();
+
                     return Ok(MessagesJSON.MessageOK("La Ciudad Fue Eliminada Correctamente"));
                 }
             }

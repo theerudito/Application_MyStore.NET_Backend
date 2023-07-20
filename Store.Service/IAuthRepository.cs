@@ -16,5 +16,7 @@ namespace Store.Service
         Task<MAuth> Login(MAuthDTO authDTO);
 
         Task<MAuth> Register(MAuth auth);
+
+        Task<List<MAuth>> SearchUserName(string name);
     }
 }

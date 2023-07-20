@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Reflection.Metadata;
+using Microsoft.AspNetCore.Mvc;
 using Store.DTO;
 using Store.Models;
 using Store.Service;
@@ -22,13 +23,13 @@ namespace Store.Backend.Controllers
         {
             var query = await _authRepository.Register(auth);
 
-            if (query == null)
+            if (query != null)
             {
-                return BadRequest(MessagesJSON.MessageError("El Usuario Ya Esta Registrado"));
+                return Ok(MessagesJSON.MessageOK("El Registro Fue Añadido Correctamente"));
             }
             else
             {
-                return Ok(MessagesJSON.MessageOK("El Registro Fue Añadido Correctamente"));
+                return BadRequest(MessagesJSON.MessageError("El Usuario Ya Esta Registrado"));
             }
         }
 
@@ -73,6 +74,16 @@ namespace Store.Backend.Controllers
             {
                 return BadRequest(MessagesJSON.MessageError("No Hay Ningun Registro Con Ese ID"));
             }
+        }
+
+        [HttpGet("input")]
+        public async Task<ActionResult> GETUser_Input(string input)
+        {
+            var users = await _authRepository.SearchUserName(input);
+
+            return users != null
+                ? Ok(users)
+                : BadRequest(MessagesJSON.MessageError(" No Hay Datos"));
         }
 
         [HttpPut("{id}")]

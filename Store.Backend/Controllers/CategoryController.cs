@@ -23,7 +23,7 @@ namespace Store.Backend.Controllers
             }
             else
             {
-                return BadRequest(MessagesJSON.MessageOK("No Existen Datos"));
+                return BadRequest(MessagesJSON.MessageError("No Existen Datos"));
             }
         }
 
@@ -42,7 +42,7 @@ namespace Store.Backend.Controllers
             }
             else
             {
-                return BadRequest(MessagesJSON.MessageOK("No Existe La Categoria"));
+                return BadRequest(MessagesJSON.MessageError("No Existe La Categoria"));
             }
         }
 
@@ -52,7 +52,7 @@ namespace Store.Backend.Controllers
             var _contextDB = new Application_ContextDB();
 
             var query = await _contextDB.Categories
-                .Where(c => c.Category.Contains(category))
+                .Where(c => c.Category.Contains(category.ToUpper()))
                 .ToListAsync();
 
             if (query != null)
@@ -61,7 +61,7 @@ namespace Store.Backend.Controllers
             }
             else
             {
-                return BadRequest(MessagesJSON.MessageOK("No Existe La Categoria"));
+                return BadRequest(MessagesJSON.MessageError("No Existe La Categoria"));
             }
         }
 
@@ -70,19 +70,22 @@ namespace Store.Backend.Controllers
         {
             var _contextDB = new Application_ContextDB();
             var query = await _contextDB.Categories
-                .Where(c => c.Category == mycategory.Category)
+                .Where(c => c.Category == mycategory.Category.ToUpper())
                 .FirstOrDefaultAsync();
 
             if (query == null)
             {
-                _contextDB.Categories.Add(mycategory);
+                var newCategory = new MCategory { Category = mycategory.Category.ToUpper() };
+
+                _contextDB.Categories.Add(newCategory);
 
                 await _contextDB.SaveChangesAsync();
+
                 return Ok(MessagesJSON.MessageOK("La Categoria Fue Agregada Correctamente"));
             }
             else
             {
-                return BadRequest(MessagesJSON.MessageOK("No Existe La Categoria"));
+                return BadRequest(MessagesJSON.MessageError("No Existe La Categoria"));
             }
         }
 
@@ -104,7 +107,7 @@ namespace Store.Backend.Controllers
                 }
                 else
                 {
-                    query.Category = mycategory.Category;
+                    query.Category = mycategory.Category.ToUpper();
 
                     await _contextDB.SaveChangesAsync();
 
@@ -115,7 +118,7 @@ namespace Store.Backend.Controllers
             }
             else
             {
-                return BadRequest(MessagesJSON.MessageOK("No Existe La Categoria"));
+                return BadRequest(MessagesJSON.MessageError("No Existe La Categoria"));
             }
         }
 
@@ -148,7 +151,7 @@ namespace Store.Backend.Controllers
             }
             else
             {
-                return BadRequest(MessagesJSON.MessageOK("No Existe La Categoria"));
+                return BadRequest(MessagesJSON.MessageError("No Existe La Categoria"));
             }
         }
     }

@@ -13,5 +13,7 @@ namespace Store.Service
         Task<MProducts> UpdateProduct(MProducts products);
 
         Task<MProducts> DeleteProduct(int id);
+
+        Task<List<MProducts>> SearchProduct(string input);
     }
 }

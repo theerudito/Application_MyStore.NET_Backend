@@ -46,6 +46,21 @@ namespace Store.Backend.Controllers
             }
         }
 
+        [HttpGet("input")]
+        public async Task<ActionResult> GET_Product_Input(string input)
+        {
+            var products = await productRepository.SearchProduct(input);
+
+            if (products != null)
+            {
+                return Ok(products);
+            }
+            else
+            {
+                return BadRequest(MessagesJSON.MessageError("No Hay Datos"));
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult> POST_Products(MProducts product)
         {

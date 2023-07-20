@@ -48,7 +48,9 @@ namespace Store.Backend.Controllers
         {
             var _contextDB = new Application_ContextDB();
 
-            var query = await _contextDB.Brands.Where(b => b.Brand.Contains(brand)).ToListAsync();
+            var query = await _contextDB.Brands
+                .Where(b => b.Brand.Contains(brand.ToUpper()))
+                .ToListAsync();
 
             if (query != null)
             {
@@ -66,13 +68,17 @@ namespace Store.Backend.Controllers
             var _contextDB = new Application_ContextDB();
 
             var query = await _contextDB.Brands
-                .Where(b => b.Brand == mybrand.Brand)
+                .Where(b => b.Brand == mybrand.Brand.ToUpper())
                 .FirstOrDefaultAsync();
 
             if (query == null)
             {
-                _contextDB.Brands.Add(mybrand);
+                var newBrand = new MBrand { Brand = mybrand.Brand.ToUpper() };
+
+                _contextDB.Brands.Add(newBrand);
+
                 await _contextDB.SaveChangesAsync();
+
                 return Ok(MessagesJSON.MessageOK("La Marca Fue Añadida Correctamente"));
             }
             else
@@ -100,8 +106,10 @@ namespace Store.Backend.Controllers
                 }
                 else
                 {
-                    query.Brand = mybrand.Brand;
+                    query.Brand = mybrand.Brand.ToUpper();
+
                     await _contextDB.SaveChangesAsync();
+
                     return Ok(MessagesJSON.MessageOK("La Marca Fue Actualizada Con Exito"));
                 }
             }
@@ -115,6 +123,7 @@ namespace Store.Backend.Controllers
         public async Task<ActionResult> DELETE_Brand(int id)
         {
             var _contextDB = new Application_ContextDB();
+
             var query = await _contextDB.Brands.Where(b => b.IdBrand == id).FirstOrDefaultAsync();
 
             if (query != null)
@@ -128,7 +137,9 @@ namespace Store.Backend.Controllers
                 else
                 {
                     _contextDB.Remove(query);
+
                     await _contextDB.SaveChangesAsync();
+
                     return Ok(MessagesJSON.MessageOK("La Marca Fue Eliminada Correctamente"));
                 }
             }

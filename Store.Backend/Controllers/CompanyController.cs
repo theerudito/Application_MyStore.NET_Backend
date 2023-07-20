@@ -57,7 +57,24 @@ namespace Store.Backend.Controllers
 
             if (query == null)
             {
-                _contextDB.Company.Add(myCompany);
+                var newCompany = new MCompany
+                {
+                    CompanyName = myCompany.CompanyName.ToUpper(),
+                    DNICompany = myCompany.DNICompany,
+                    OwnerCompany = myCompany.OwnerCompany.ToUpper(),
+                    DirectionCompany = myCompany.DirectionCompany.ToUpper(),
+                    EmailCompany = myCompany.EmailCompany,
+                    PhoneCompany = myCompany.PhoneCompany,
+                    NumDocumentCompany = myCompany.NumDocumentCompany,
+                    SerieOneCompany = myCompany.SerieOneCompany,
+                    SerieTwoCompany = myCompany.SerieTwoCompany,
+                    DataBaseName = myCompany.DataBaseName.ToUpper(),
+                    TypeDocument = myCompany.TypeDocument.ToUpper(),
+                    IvaCompany = myCompany.IvaCompany,
+                    CoinCompany = myCompany.CoinCompany.ToUpper(),
+                };
+
+                _contextDB.Company.Add(newCompany);
 
                 await _contextDB.SaveChangesAsync();
 
@@ -80,19 +97,19 @@ namespace Store.Backend.Controllers
 
             if (query != null)
             {
-                query.CompanyName = myCompany.CompanyName;
+                query.CompanyName = myCompany.CompanyName.ToUpper();
                 query.DNICompany = myCompany.DNICompany;
-                query.OwnerCompany = myCompany.OwnerCompany;
-                query.DirectionCompany = myCompany.DirectionCompany;
+                query.OwnerCompany = myCompany.OwnerCompany.ToUpper();
+                query.DirectionCompany = myCompany.DirectionCompany.ToUpper();
                 query.EmailCompany = myCompany.EmailCompany;
                 query.PhoneCompany = myCompany.PhoneCompany;
                 query.NumDocumentCompany = myCompany.NumDocumentCompany;
                 query.SerieOneCompany = myCompany.SerieOneCompany;
                 query.SerieTwoCompany = myCompany.SerieTwoCompany;
-                query.DataBaseName = myCompany.DataBaseName;
-                query.TypeDocument = myCompany.TypeDocument;
+                query.DataBaseName = myCompany.DataBaseName.ToUpper();
+                query.TypeDocument = myCompany.TypeDocument.ToUpper();
                 query.IvaCompany = myCompany.IvaCompany;
-                query.CoinCompany = myCompany.CoinCompany;
+                query.CoinCompany = myCompany.CoinCompany.ToUpper();
 
                 await _contextDB.SaveChangesAsync();
 

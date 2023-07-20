@@ -14,5 +14,7 @@ namespace Store.Service
         Task<MClients> UpdateClient(MClientsDTO client);
 
         Task<MClients> DeleteClient(int id);
+
+        Task<List<MClients>> SeachClient(string input);
     }
 }

@@ -40,7 +40,7 @@ namespace Store.Repository
             var _contextDB = new Application_ContextDB();
 
             var query = await _contextDB.Auth
-                .Where(user => user.UserName == authDTO.UserName)
+                .Where(user => user.UserName == authDTO.UserName.ToUpper())
                 .FirstOrDefaultAsync();
 
             if (query != null)
@@ -69,13 +69,13 @@ namespace Store.Repository
             {
                 var user = new MAuth
                 {
-                    User = auth.User,
-                    UserName = auth.UserName,
+                    User = auth.User.ToUpper(),
+                    UserName = auth.UserName.ToUpper(),
                     Email = auth.Email,
                     Password = ApplicationCrypt.Encriptar(auth.Password),
                     Phone = auth.Phone,
-                    Direction = auth.Direction,
-                    Role = auth.Role,
+                    Direction = auth.Direction.ToUpper(),
+                    Role = auth.Role.ToUpper(),
                     Status = auth.Status
                 };
 
@@ -105,13 +105,13 @@ namespace Store.Repository
                 }
                 else
                 {
-                    query.User = auth.User;
-                    query.UserName = auth.UserName;
+                    query.User = auth.User.ToUpper();
+                    query.UserName = auth.UserName.ToUpper();
                     query.Email = auth.Email;
                     query.Password = ApplicationCrypt.Encriptar(auth.Password);
                     query.Phone = auth.Phone;
-                    query.Direction = auth.Direction;
-                    query.Role = auth.Role;
+                    query.Direction = auth.Direction.ToUpper();
+                    query.Role = auth.Role.ToUpper();
                     query.Status = auth.Status;
 
                     await _contextDB.SaveChangesAsync();
@@ -150,6 +150,24 @@ namespace Store.Repository
                         return query;
                     }
                 }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<MAuth>> SearchUserName(string name)
+        {
+            var _contextDB = new Application_ContextDB();
+
+            var query = await _contextDB.Auth
+                .Where(user => user.User.Contains(name.ToUpper()))
+                .ToListAsync();
+
+            if (query != null)
+            {
+                return query;
             }
             else
             {

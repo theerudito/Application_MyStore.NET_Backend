@@ -12,7 +12,7 @@ namespace Store.Repository
             var _contextDB = new Application_ContextDB();
 
             var query = await _contextDB.Product
-                .Where(p => p.CodeProduct == products.CodeProduct)
+                .Where(p => p.CodeProduct == products.CodeProduct.ToUpper())
                 .FirstOrDefaultAsync();
 
             if (query != null)
@@ -21,7 +21,21 @@ namespace Store.Repository
             }
             else
             {
-                _contextDB.Product.Add(products);
+                var newProduct = new MProducts
+                {
+                    CodeProduct = products.CodeProduct,
+                    NameProduct = products.NameProduct.ToUpper(),
+                    Brand = products.Brand.ToUpper(),
+                    Category = products.Category.ToUpper(),
+                    Description = products.Description.ToUpper(),
+                    PriceUnitary = products.PriceUnitary,
+                    PriceTotal = products.PriceTotal,
+                    Quantity = products.Quantity,
+                    Status = products.Status,
+                    Iva = products.Iva,
+                };
+
+                _contextDB.Product.Add(newProduct);
 
                 await _contextDB.SaveChangesAsync();
 
@@ -98,6 +112,30 @@ namespace Store.Repository
             }
         }
 
+        public async Task<List<MProducts>> SearchProduct(string input)
+        {
+            var _contextDB = new Application_ContextDB();
+
+            var query = await _contextDB.Product
+                .Where(
+                    p =>
+                        p.CodeProduct.Contains(input.ToUpper())
+                        || p.Description.Contains(input.ToUpper())
+                        || p.Brand.Contains(input.ToUpper())
+                        || p.Category.Contains(input.ToUpper())
+                )
+                .ToListAsync();
+
+            if (query != null)
+            {
+                return query;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public async Task<MProducts> UpdateProduct(MProducts products)
         {
             var _contextDB = new Application_ContextDB();
@@ -114,11 +152,11 @@ namespace Store.Repository
                 }
                 else
                 {
-                    query.CodeProduct = products.Brand;
-                    query.NameProduct = products.NameProduct;
-                    query.Brand = products.Brand;
-                    query.Category = products.Category;
-                    query.Description = products.Description;
+                    query.CodeProduct = products.CodeProduct;
+                    query.NameProduct = products.NameProduct.ToUpper();
+                    query.Brand = products.Brand.ToUpper();
+                    query.Category = products.Category.ToUpper();
+                    query.Description = products.Description.ToUpper();
                     query.Iva = products.Iva;
                     query.PriceUnitary = products.PriceUnitary;
                     query.PriceTotal = products.PriceTotal;

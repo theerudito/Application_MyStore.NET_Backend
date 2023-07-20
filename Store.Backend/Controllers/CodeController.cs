@@ -40,7 +40,7 @@ namespace Store.Backend.Controllers
             }
             else
             {
-                return BadRequest(MessagesJSON.MessageOK("No Existe El Registro"));
+                return BadRequest(MessagesJSON.MessageError("No Existe El Registro"));
             }
         }
 
@@ -64,25 +64,25 @@ namespace Store.Backend.Controllers
             }
             else
             {
-                return BadRequest(MessagesJSON.MessageOK("El Codigo Ya Existe"));
+                return BadRequest(MessagesJSON.MessageError("El Codigo Ya Existe"));
             }
         }
 
         [HttpPost("code")]
-        public async Task<ActionResult> POST_Code_Code(MCode Code)
+        public async Task<ActionResult> POST_Code_Code(MCode myCode)
         {
+            var IdCode = myCode.IdCode;
+
             var _contextDB = new Application_ContextDB();
             var query = await _contextDB.AppCode
-                .Where(c => c.Code == Code.Code)
+                .Where(c => c.IdCode == IdCode)
                 .FirstOrDefaultAsync();
-
-            var newCode = new MCode { Code = ApplicationCrypt.Encriptar(Code.Code) };
 
             if (query != null)
             {
-                if (query.Code == ApplicationCrypt.Encriptar(Code.Code))
+                if (ApplicationCrypt.Desencriptar(myCode.Code, query.Code) == true)
                 {
-                    return BadRequest(MessagesJSON.MessageOK("El Codigo Es Correcto"));
+                    return Ok(MessagesJSON.MessageOK("El Codigo Es Correcto"));
                 }
                 else
                 {
@@ -114,16 +114,16 @@ namespace Store.Backend.Controllers
                 }
                 else
                 {
-                    var newCode = new MCode { Code = ApplicationCrypt.Encriptar(myCode.Code) };
+                    query.Code = ApplicationCrypt.Encriptar(myCode.Code);
 
                     await _contextDB.SaveChangesAsync();
 
-                    return Ok(MessagesJSON.MessageOK("El Nuevo Codigo Fue Añadido Correctamente"));
+                    return Ok(MessagesJSON.MessageOK("El Codigo Fue Actualizado Correctamente"));
                 }
             }
             else
             {
-                return BadRequest(MessagesJSON.MessageOK("No Existe El Registro"));
+                return BadRequest(MessagesJSON.MessageError("No Existe El Registro"));
             }
         }
 
@@ -152,7 +152,7 @@ namespace Store.Backend.Controllers
             }
             else
             {
-                return BadRequest(MessagesJSON.MessageOK("No Existe El Registro"));
+                return BadRequest(MessagesJSON.MessageError("No Existe El Registro"));
             }
         }
     }
