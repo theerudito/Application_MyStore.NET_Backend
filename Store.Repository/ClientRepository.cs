@@ -10,16 +10,16 @@ namespace Store.Repository
     public class ClientRepository : IClientRepository
     {
         private readonly IMapper mapper;
+        private readonly Application_ContextDB _contextDB;
 
-        public ClientRepository(IMapper mapper)
+        public ClientRepository(IMapper mapper, Application_ContextDB _contextDB)
         {
+            this._contextDB = _contextDB;
             this.mapper = mapper;
         }
 
         public async Task<MClients> CreateClient(MClientsDTO client)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Client
                 .Where(cli => cli.DNI == client.DNI)
                 .FirstOrDefaultAsync();
@@ -48,8 +48,6 @@ namespace Store.Repository
 
         public async Task<MClients> DeleteClient(int id)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Client
                 .Where(cli => cli.IdClient == id)
                 .FirstOrDefaultAsync();
@@ -81,8 +79,6 @@ namespace Store.Repository
 
         public async Task<List<MClients>> GetAllClients()
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Client.ToListAsync();
 
             return query;
@@ -90,7 +86,6 @@ namespace Store.Repository
 
         public async Task<MClients> GetClientById(int id)
         {
-            var _contextDB = new Application_ContextDB();
             var query = await _contextDB.Client
                 .Where(cli => cli.IdClient == id)
                 .FirstOrDefaultAsync();
@@ -104,8 +99,6 @@ namespace Store.Repository
 
         public async Task<MClients> UpdateClient(MClientsDTO client)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Client
                 .Where(cli => cli.IdClient == client.IdClient)
                 .FirstOrDefaultAsync();
@@ -136,8 +129,6 @@ namespace Store.Repository
 
         public async Task<List<MClients>> SeachClient(string input)
         {
-            var _contextDB = new Application_ContextDB();
-
             var listClients = await _contextDB.Client.ToListAsync();
 
             var query = await _contextDB.Client

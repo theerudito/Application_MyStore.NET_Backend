@@ -10,11 +10,16 @@ namespace Store.Backend.Controllers
     [Route("api/v1/[controller]")]
     public class CodeController : ControllerBase
     {
+        private readonly Application_ContextDB _contextDB;
+
+        public CodeController(Application_ContextDB _contextDB)
+        {
+            this._contextDB = _contextDB;
+        }
+
         [HttpGet]
         public async Task<ActionResult> GET_Codes()
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.AppCode.ToListAsync();
 
             if (query != null)
@@ -30,8 +35,6 @@ namespace Store.Backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GET_Code(int id)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.AppCode.Where(c => c.IdCode == id).FirstOrDefaultAsync();
 
             if (query != null)
@@ -47,8 +50,6 @@ namespace Store.Backend.Controllers
         [HttpPost]
         public async Task<ActionResult> GET_Code(MCode myCode)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.AppCode
                 .Where(c => c.Code == myCode.Code)
                 .FirstOrDefaultAsync();
@@ -73,7 +74,6 @@ namespace Store.Backend.Controllers
         {
             var IdCode = myCode.IdCode;
 
-            var _contextDB = new Application_ContextDB();
             var query = await _contextDB.AppCode
                 .Where(c => c.IdCode == IdCode)
                 .FirstOrDefaultAsync();
@@ -98,8 +98,6 @@ namespace Store.Backend.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> PUT_Code(MCode myCode)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.AppCode
                 .Where(c => c.IdCode == myCode.IdCode)
                 .FirstOrDefaultAsync();
@@ -130,8 +128,6 @@ namespace Store.Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DELETE_Code(int id)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.AppCode.Where(c => c.IdCode == id).FirstOrDefaultAsync();
 
             if (query != null)

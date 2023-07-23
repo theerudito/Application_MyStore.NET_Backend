@@ -10,11 +10,16 @@ namespace Store.Backend.Controllers
     [Route("api/v1/[controller]")]
     public class CompanyController : ControllerBase
     {
+        private readonly Application_ContextDB _contextDB;
+
+        public CompanyController(Application_ContextDB _contextDB)
+        {
+            this._contextDB = _contextDB;
+        }
+
         [HttpGet]
         public async Task<ActionResult> GET_Companies()
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Company.ToListAsync();
 
             if (query != null)
@@ -30,8 +35,6 @@ namespace Store.Backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GET_Company(int id)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Company
                 .Where(c => c.IdCompany == id)
                 .FirstOrDefaultAsync();
@@ -49,8 +52,6 @@ namespace Store.Backend.Controllers
         [HttpPost]
         public async Task<ActionResult> POST_Company(MCompany myCompany)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Company
                 .Where(c => c.DNICompany == myCompany.DNICompany)
                 .FirstOrDefaultAsync();
@@ -89,8 +90,6 @@ namespace Store.Backend.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> PUT_Company(MCompany myCompany)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Company
                 .Where(c => c.IdCompany == myCompany.IdCompany)
                 .FirstOrDefaultAsync();
@@ -126,8 +125,6 @@ namespace Store.Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DELETE_Company(int id)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Company
                 .Where(c => c.IdCompany == id)
                 .FirstOrDefaultAsync();
