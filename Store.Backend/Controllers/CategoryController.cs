@@ -10,11 +10,16 @@ namespace Store.Backend.Controllers
     [Route("api/v1/[controller]")]
     public class CategoryController : ControllerBase
     {
+        private readonly Application_ContextDB _contextDB;
+
+        public CategoryController(Application_ContextDB _contextDB)
+        {
+            this._contextDB = _contextDB;
+        }
+
         [HttpGet]
         public async Task<ActionResult> GET_Categories()
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Categories.ToListAsync();
 
             if (query != null)
@@ -30,8 +35,6 @@ namespace Store.Backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GET_Category(int id)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Categories
                 .Where(c => c.IdCategory == id)
                 .FirstOrDefaultAsync();
@@ -49,8 +52,6 @@ namespace Store.Backend.Controllers
         [HttpGet("category")]
         public async Task<ActionResult> GET_Category_Name(string category)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Categories
                 .Where(c => c.Category.Contains(category.ToUpper()))
                 .ToListAsync();
@@ -68,7 +69,6 @@ namespace Store.Backend.Controllers
         [HttpPost]
         public async Task<ActionResult> POST_Category(MCategory mycategory)
         {
-            var _contextDB = new Application_ContextDB();
             var query = await _contextDB.Categories
                 .Where(c => c.Category == mycategory.Category.ToUpper())
                 .FirstOrDefaultAsync();
@@ -92,7 +92,6 @@ namespace Store.Backend.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> PUT_Category(MCategory mycategory)
         {
-            var _contextDB = new Application_ContextDB();
             var query = await _contextDB.Categories
                 .Where(c => c.IdCategory == mycategory.IdCategory)
                 .FirstOrDefaultAsync();
@@ -125,7 +124,6 @@ namespace Store.Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DELETE_Category(int id)
         {
-            var _contextDB = new Application_ContextDB();
             var query = await _contextDB.Categories
                 .Where(c => c.IdCategory == id)
                 .FirstOrDefaultAsync();

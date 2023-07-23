@@ -10,11 +10,16 @@ namespace Store.Backend.Controllers
     [Route("api/v1/[controller]")]
     public class CityController : ControllerBase
     {
+        private readonly Application_ContextDB _contextDB;
+
+        public CityController(Application_ContextDB _contextDB)
+        {
+            this._contextDB = _contextDB;
+        }
+
         [HttpGet]
         public async Task<ActionResult> GET_Cities()
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Cities.ToListAsync();
 
             if (query != null)
@@ -30,8 +35,6 @@ namespace Store.Backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GET_City(int id)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Cities.Where(c => c.IdCity == id).FirstOrDefaultAsync();
 
             if (query != null)
@@ -47,8 +50,6 @@ namespace Store.Backend.Controllers
         [HttpGet("city")]
         public async Task<ActionResult> GET_City_Name(string city)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Cities
                 .Where(c => c.City.Contains(city.ToUpper()))
                 .ToListAsync();
@@ -66,8 +67,6 @@ namespace Store.Backend.Controllers
         [HttpPost]
         public async Task<ActionResult> POST_City(MCity myCity)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Cities
                 .Where(c => c.City == myCity.City.ToUpper())
                 .FirstOrDefaultAsync();
@@ -91,8 +90,6 @@ namespace Store.Backend.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> PUT_City(MCity myCity)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Cities
                 .Where(c => c.IdCity == myCity.IdCity)
                 .FirstOrDefaultAsync();
@@ -123,8 +120,6 @@ namespace Store.Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DELETE_City(int id)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Cities.Where(c => c.IdCity == id).FirstOrDefaultAsync();
 
             if (query != null)

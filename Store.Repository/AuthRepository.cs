@@ -11,15 +11,16 @@ namespace Store.Repository
     public class AuthRepository : IAuthRepository
     {
         private readonly IMapper mapper;
+        private readonly Application_ContextDB _contextDB;
 
-        public AuthRepository(IMapper mapper)
+        public AuthRepository(IMapper mapper, Application_ContextDB _contextDB)
         {
+            this._contextDB = _contextDB;
             this.mapper = mapper;
         }
 
         public async Task<List<MAuth>> GetAllUsers()
         {
-            var _contextDB = new Application_ContextDB();
             var query = await _contextDB.Auth.ToListAsync();
 
             return query != null ? query : null;
@@ -27,7 +28,6 @@ namespace Store.Repository
 
         public async Task<MAuth> GetUserById(int id)
         {
-            var _contextDB = new Application_ContextDB();
             var query = await _contextDB.Auth
                 .Where(user => user.IdAuth == id)
                 .FirstOrDefaultAsync();
@@ -37,8 +37,6 @@ namespace Store.Repository
 
         public async Task<MAuth> Login(MAuthDTO authDTO)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Auth
                 .Where(user => user.UserName == authDTO.UserName.ToUpper())
                 .FirstOrDefaultAsync();
@@ -59,8 +57,6 @@ namespace Store.Repository
 
         public async Task<MAuth> Register(MAuth auth)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Auth
                 .Where(user => user.Email == auth.Email)
                 .FirstOrDefaultAsync();
@@ -91,8 +87,6 @@ namespace Store.Repository
 
         public async Task<MAuth> UpdateUser(MAuth auth)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Auth
                 .Where(user => user.IdAuth == auth.IdAuth)
                 .FirstOrDefaultAsync();
@@ -123,8 +117,6 @@ namespace Store.Repository
 
         public async Task<MAuth> DeleteUser(int id)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Auth
                 .Where(user => user.IdAuth == id)
                 .FirstOrDefaultAsync();
@@ -159,8 +151,6 @@ namespace Store.Repository
 
         public async Task<List<MAuth>> SearchUserName(string name)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Auth
                 .Where(user => user.User.Contains(name.ToUpper()))
                 .ToListAsync();

@@ -10,11 +10,16 @@ namespace Store.Backend.Controllers
     [Route("api/v1/[controller]")]
     public class BrandController : ControllerBase
     {
+        private readonly Application_ContextDB _contextDB;
+
+        public BrandController(Application_ContextDB _contextDB)
+        {
+            this._contextDB = _contextDB;
+        }
+
         [HttpGet]
         public async Task<ActionResult> GET_Brands()
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Brands.ToListAsync();
 
             if (query != null)
@@ -30,7 +35,6 @@ namespace Store.Backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GET_Brand(int id)
         {
-            var _contextDB = new Application_ContextDB();
             var query = await _contextDB.Brands.Where(b => b.IdBrand == id).FirstOrDefaultAsync();
 
             if (query != null)
@@ -46,8 +50,6 @@ namespace Store.Backend.Controllers
         [HttpGet("brand")]
         public async Task<ActionResult> GET_Brans_Name(string brand)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Brands
                 .Where(b => b.Brand.Contains(brand.ToUpper()))
                 .ToListAsync();
@@ -65,8 +67,6 @@ namespace Store.Backend.Controllers
         [HttpPost]
         public async Task<ActionResult> POST_Brand(MBrand mybrand)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Brands
                 .Where(b => b.Brand == mybrand.Brand.ToUpper())
                 .FirstOrDefaultAsync();
@@ -90,8 +90,6 @@ namespace Store.Backend.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> PUT_Brand(MBrand mybrand)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Brands
                 .Where(b => b.IdBrand == mybrand.IdBrand)
                 .FirstOrDefaultAsync();
@@ -122,8 +120,6 @@ namespace Store.Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DELETE_Brand(int id)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Brands.Where(b => b.IdBrand == id).FirstOrDefaultAsync();
 
             if (query != null)

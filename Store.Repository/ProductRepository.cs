@@ -7,10 +7,15 @@ namespace Store.Repository
 {
     public class ProductRepository : IProductRepository
     {
+        private readonly Application_ContextDB _contextDB;
+
+        public ProductRepository(Application_ContextDB _contextDB)
+        {
+            this._contextDB = _contextDB;
+        }
+
         public async Task<MProducts> CreateProduct(MProducts products)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Product
                 .Where(p => p.CodeProduct == products.CodeProduct.ToUpper())
                 .FirstOrDefaultAsync();
@@ -45,8 +50,6 @@ namespace Store.Repository
 
         public async Task<MProducts> DeleteProduct(int id)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Product
                 .Where(p => p.IdProduct == id)
                 .FirstOrDefaultAsync();
@@ -81,8 +84,6 @@ namespace Store.Repository
 
         public async Task<List<MProducts>> GetAllProducts()
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Product.ToListAsync();
 
             if (query != null)
@@ -97,7 +98,6 @@ namespace Store.Repository
 
         public async Task<MProducts> GetProductById(int id)
         {
-            var _contextDB = new Application_ContextDB();
             var query = await _contextDB.Product
                 .Where(p => p.IdProduct == id)
                 .FirstOrDefaultAsync();
@@ -114,8 +114,6 @@ namespace Store.Repository
 
         public async Task<List<MProducts>> SearchProduct(string input)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Product
                 .Where(
                     p =>
@@ -138,8 +136,6 @@ namespace Store.Repository
 
         public async Task<MProducts> UpdateProduct(MProducts products)
         {
-            var _contextDB = new Application_ContextDB();
-
             var query = await _contextDB.Product
                 .Where(p => p.IdProduct == products.IdProduct)
                 .FirstOrDefaultAsync();
